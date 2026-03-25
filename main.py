@@ -28,11 +28,6 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("❌ Please send a valid video file.")
         return
 
-    # ✅ YE SIZE CHECK YAHA HONA CHAHIYE
-    if video.file_size > 100 * 1024 * 1024:
-        await update.message.reply_text("❌ 100MB se badi file allowed nahi")
-        return
-
     await update.message.reply_text("⏳ Processing video...")
 
     file = await context.bot.get_file(video.file_id)
