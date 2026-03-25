@@ -22,13 +22,20 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("⏳ Video mil gayi! Processing ho rahi hai, thoda wait karo...")
-    
-    try:
-        video = update.message.video or update.message.document
-        if video.file_size > 100 * 1024 * 1024:
-    await update.message.reply_text("❌ 100MB se badi file allowed nahi")
-    return
+    video = update.message.video or update.message.document
+
+    if not video:
+        await update.message.reply_text("❌ Please send a valid video file.")
+        return
+
+    # ✅ YE SIZE CHECK YAHA HONA CHAHIYE
+    if video.file_size > 100 * 1024 * 1024:
+        await update.message.reply_text("❌ 100MB se badi file allowed nahi")
+        return
+
+    await update.message.reply_text("⏳ Processing video...")
+
+    file = await context.bot.get_file(video.file_id)
         
         with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as tmp:
             await file.download_to_drive(tmp.name)
