@@ -55,7 +55,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("🧠 Generating explanation...")
 
         # ✅ SAFE PROMPT (no video upload)
-        model = genai.GenerativeModel("gemini-1.0-pro")
+        model = genai.GenerativeModel("gemini-2.0-flash")
 
         prompt = """Create a dramatic English explanation of a short drama scene.
 Make it emotional, engaging, and story-like.
