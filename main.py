@@ -4,6 +4,7 @@ import google.generativeai as genai
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 import tempfile
+from gtts import gTTS
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -62,6 +63,9 @@ Explain the full story in a simple and emotional way like a movie narration."""
         Engaging aur dramatic style mein likho!"""
         
         response = model.generate_content([video_file, prompt])
+voice_file = text_to_voice(response.text)
+
+await update.message.reply_audio(audio=open(voice_file, "rb"))
         
         explanation = response.text
         
@@ -93,3 +97,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def text_to_voice(text):
+    tts = gTTS(text=text, lang='en')
+    tts.save("output.mp3")
+    return "output.mp3"
