@@ -15,9 +15,9 @@ genai.configure(api_key=GEMINI_API_KEY)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "🎬 Drama Explanation Bot mein aapka swagat hai!\n\n"
-        "Video bhejiye aur main uski poori explanation dunga!\n"
-        "Supported: MP4, AVI, MKV (max 20MB)"
+        "🎬 Welcome to Drama Explanation Bot!\n\n"
+        "Send me a video and I will explain it in English with voice!\n"
+        "Supported: MP4, AVI, MKV (max 100MB)"
     )
 
 async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -25,7 +25,9 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     try:
         video = update.message.video or update.message.document
-        file = await context.bot.get_file(video.file_id)
+        if video.file_size > 100 * 1024 * 1024:
+    await update.message.reply_text("❌ 100MB se badi file allowed nahi")
+    return
         
         with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as tmp:
             await file.download_to_drive(tmp.name)
@@ -35,10 +37,10 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         video_file = genai.upload_file(path=tmp_path, mime_type="video/mp4")
         
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
         
-        prompt = """Is video ko dhyan se dekho aur Hindi mein ek dramatic explanation likho jaise ek 
-        professional storyteller bata raha ho. Yeh include karo:
+       prompt = """Watch this video carefully and create a dramatic, emotional explanation in English.
+Make it engaging like a movie story."
         
         🎬 STORY KI SHURUAAT
         - Scene setting kya hai
