@@ -39,8 +39,8 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         model = genai.GenerativeModel("gemini-1.5-flash-latest")
         
-       prompt = """Watch this video carefully and create a dramatic, emotional explanation in English.
-Make it engaging like a movie story."
+       prompt = """Watch this video carefully and create a clear, engaging, and dramatic explanation in English only.
+Explain the full story in a simple and emotional way like a movie narration."""
         
         🎬 STORY KI SHURUAAT
         - Scene setting kya hai
